@@ -1,46 +1,63 @@
 import UserModel from "@/model/User";
 import dbConnect from "@/lib/dbConnect";
-import { Message } from "@/model/User";
-import { User } from "next-auth";
+// import { User } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import { getServerSession } from "next-auth/next";
 import mongoose from "mongoose";
 
-export async function GET(request: Request) {
+export async function GET() {
   await dbConnect();
-  const session = getServerSession(authOptions);
-  const _user: User = session?.user;
+
+  const session = await getServerSession(authOptions);
+  const _user  = session?.user; 
+
   if (!_user || !session) {
-    return Response.json(
-      {
-        success: true,
-        messages: "user is authenticated'",
-      },
-      { status: 401 }
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "User is not authenticated",
+      }),
+      { status: 401, headers: { "Content-Type": "application/json" } }
     );
   }
-  const userId=new mongoose.Types.ObjectId(_user._id)
-  try {
-    const user=await userModel.aggregate(
-        {$match:{_id:userId}},
-        {$unwind:'$messages'},
-        {$sort:{message.createdAt:-1}},
-        {$group:{_id:'$_id':messages:{$push:'$messages'}}}
-    ).exec();
 
-    if(!user||user.length==0){
-    return Response.json({success:false,message:"user not found "},{status:404})
-    }
-    return Response.json(
-        { messages: user[0].messages },
-        {
-          status: 200,
-        }
+  const userId = new mongoose.Types.ObjectId(_user._id); 
+
+  try {
+    const user = await UserModel.aggregate([
+      { $match: { _id: userId } }, // Correct $match stage
+      { $unwind: "$messages" }, // Unwind messages array
+      { $sort: { "messages.createdAt": -1 } }, // Sort messages by createdAt
+      {
+        $group: {
+          _id: "$_id",
+          messages: { $push: "$messages" }, 
+        },
+      },
+    ]).exec();
+
+    if (!user || user.length === 0) {
+      return new Response(
+        JSON.stringify({ success: false, message: "User not found" }),
+        { status: 404, headers: { "Content-Type": "application/json" } }
       );
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        messages: user[0].messages, // Return grouped messages
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
   } catch (error) {
-    console.log("")
-    return Response.json({success:false,
-        message:"Unable to get messages of Usre"}
-        ,{status:500})
+    console.error("Error fetching messages:", error);
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "Unable to get messages for the user",
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }
