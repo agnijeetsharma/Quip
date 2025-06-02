@@ -73,7 +73,9 @@ export default function VerifyAccount() {
                 </FormItem>
               )}
             />
+            <div className="text-center">
             <Button type="submit">Verify</Button>
+            </div>
           </form>
         </Form>
       </div>
