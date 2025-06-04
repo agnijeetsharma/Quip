@@ -1,36 +1,52 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
-// import { authOptions } from "../auth/[...nextauth]/options";
 import { Message } from "@/model/User";
 
 export async function POST(request: Request) {
   await dbConnect();
-  const { username, content } = await request.json();
 
   try {
+    const { username, content } = await request.json();
+
+    if (!username || !content) {
+      return Response.json(
+        { success: false, message: "Username and content are required." },
+        { status: 400 }
+      );
+    }
+
     const user = await UserModel.findOne({ username });
     if (!user) {
       return Response.json(
-        { success: false, message: "Unable to fetch user" },
-        { status: 401 }
+        { success: false, message: "User not found." },
+        { status: 404 }
       );
     }
 
     if (!user.isAcceptingMessages) {
       return Response.json(
-        { success: false, message: "User is not accpeting Messages rifht-now" },
+        { success: false, message: "User is not accepting messages right now." },
         { status: 403 }
       );
     }
-    const newMessages = { content, createdAt: new Date() };
 
-    user.messages.push(newMessages as Message);
+    const newMessage: Message = {
+      content,
+      createdAt: new Date(),
+    };
+
+    user.messages.push(newMessage);
     await user.save();
-  } catch (error) {
-    console.log("Error while sending messages to the User", error);
+
     return Response.json(
-      { success: true, message: "Error while sendings messages to the user" },
-      { status: 400 }
+      { success: true, message: "Message sent successfully." },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error while sending message:", error);
+    return Response.json(
+      { success: false, message: "Internal server error." },
+      { status: 500 }
     );
   }
 }

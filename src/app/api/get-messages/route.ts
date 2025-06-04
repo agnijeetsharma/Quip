@@ -25,9 +25,9 @@ export async function GET() {
 
   try {
     const user = await UserModel.aggregate([
-      { $match: { _id: userId } }, // Correct $match stage
-      { $unwind: "$messages" }, // Unwind messages array
-      { $sort: { "messages.createdAt": -1 } }, // Sort messages by createdAt
+      { $match: { _id: userId } }, 
+      { $unwind: "$messages" }, 
+      { $sort: { "messages.createdAt": -1 } }, 
       {
         $group: {
           _id: "$_id",
@@ -35,10 +35,15 @@ export async function GET() {
         },
       },
     ]).exec();
-
-    if (!user || user.length === 0) {
+   if(user.length === 0) {
       return new Response(
-        JSON.stringify({ success: false, message: "User not found" }),
+        JSON.stringify({ success: true, message: "No Messages found" }),
+        { status: 200, headers: { "Content-Type": "application/json" } }
+      );
+    }
+    if (!user ) {
+      return new Response(
+        JSON.stringify({ success: false, message: "No Messages found" }),
         { status: 404, headers: { "Content-Type": "application/json" } }
       );
     }
@@ -46,7 +51,7 @@ export async function GET() {
     return new Response(
       JSON.stringify({
         success: true,
-        messages: user[0].messages, // Return grouped messages
+        messages: user[0].messages, 
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
