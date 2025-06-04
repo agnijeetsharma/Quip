@@ -27,6 +27,7 @@ export async function POST(request: Request) {
     // Check for existing user by email
     const verifiedUserWithEmail = await UserModel.findOne({ email });
     const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log("Generated verification code:", verifyCode);
 
     if (verifiedUserWithEmail) {
       if (verifiedUserWithEmail.isVerified) {

@@ -8,6 +8,7 @@ export async function POST(request: Request) {
   try {
     const { username, code } = await request.json();
     const decodeusername = decodeURIComponent(username);
+    console.log("Decoded username:", decodeusername);
     const user = await UserModel.findOne({ username: decodeusername });
     if (!user) {
       return Response.json(
@@ -21,7 +22,10 @@ export async function POST(request: Request) {
     if (isCodeValid && verifyCodeExpried) {
       user.isVerified = true;
       await user.save();
-      return;
+      return Response.json(
+        { success: true, message: "User verified successfully" },
+        { status: 200 }
+      );
     } else if (!isCodeValid) {
       return Response.json(
         { success: false, message: "Invalid verification code" },
@@ -41,7 +45,7 @@ export async function POST(request: Request) {
         message: "error during code verification",
       },
       {
-        status: 4000,
+        status: 400,
       }
     );
   }

@@ -22,6 +22,7 @@ export const authOptions: NextAuthOptions = {
               { username: credentials.identifier },
             ],
           });
+          console.log( credentials.identifier, credentials.identifier);
           if (!user) {
             throw new Error("No user found. Check your email.");
           }
@@ -70,5 +71,6 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/sign-in",
+    error: "/auth/error"
   },
 };
