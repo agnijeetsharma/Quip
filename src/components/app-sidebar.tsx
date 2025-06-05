@@ -1,7 +1,14 @@
-import {  Home, Inbox, Search, Settings,LayoutDashboard,FileQuestionIcon } from "lucide-react"
+"use client";
+import {
+  Home,
+  LogOut,
+  Search,
+  Settings,
+  LayoutDashboard,
+  FileQuestionIcon,
+  LogOutIcon,
+} from "lucide-react";
 // import { useSidebar } from "@/components/ui/sidebar"
-
-
 
 import {
   Sidebar,
@@ -12,8 +19,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-
+} from "@/components/ui/sidebar";
+import { signOut } from "next-auth/react";
 // Menu items.
 const items = [
   {
@@ -27,7 +34,7 @@ const items = [
     icon: LayoutDashboard,
   },
   {
-    title: "Feedback",
+    title: "Give-Feedback",
     url: "/all-questions",
     icon: FileQuestionIcon,
   },
@@ -37,24 +44,22 @@ const items = [
     icon: Search,
   },
   {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Log Out",
+    icon: LogOut,
+    onClick: () => signOut({ callbackUrl: "/" }),
   },
-]
+];
 
 export function AppSidebar() {
-    
-   
   return (
-    <Sidebar >
+    <Sidebar className="bg">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.title} onClick={item.onClick} className="cursor-pointer">
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
                       <item.icon />
@@ -63,10 +68,11 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
