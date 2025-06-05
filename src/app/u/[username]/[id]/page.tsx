@@ -35,8 +35,11 @@ const initialMessageString =
   "What's your favorite movie?||Do you have any pets?||What's your dream job?";
 
 export default function SendMessage() {
-  const params = useParams<{ username: string }>();
+  const params = useParams<{ username: string,id:string }>();
+  const id=params.id;
   const username = params.username;
+  console.log('Username:', username);
+  console.log('ID:', id);
 
   const {
     complete,
@@ -66,6 +69,7 @@ export default function SendMessage() {
       const response = await axios.post<ApiResponse>('/api/send-message', {
         ...data,
         username,
+        id
       });
 
       toast({

@@ -6,9 +6,9 @@ export async function POST(request: Request) {
   await dbConnect();
 
   try {
-    const { username, content } = await request.json();
+    const { username, content,id } = await request.json();
 
-    if (!username || !content) {
+    if (!username || !content||!id) {
       return Response.json(
         { success: false, message: "Username and content are required." },
         { status: 400 }
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
 
     const newMessage: Message = {
       content,
+      questionId: id, // Assuming id is the question ID
       createdAt: new Date(),
     };
 
