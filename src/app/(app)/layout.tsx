@@ -1,14 +1,14 @@
-// import Navbar from '@/components/Navbar';
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
-interface RootLayoutProps {
-  children: React.ReactNode;
-}
-
-export default async function RootLayout({ children }: RootLayoutProps) {
+export default function DashboardLayout({ children }) {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* <Navbar /> */}
-      {children}
-    </div>
+    <SidebarProvider defaultOpen={false}>
+      <div className="dark  min-h-screen">
+        <AppSidebar />
+      </div>
+      <SidebarTrigger className="mt-5 bg-white text-black hover:bg-gray-800 hover:text-white" />
+      <main className="w-full">{children}</main>
+    </SidebarProvider>
   );
 }
