@@ -47,7 +47,7 @@ const UserSchema: Schema<User> = new Schema({
   verifyCode: { type: String, required: true },
   verifyCodeExpiry: { type: Date, required: true },
   isVerified: { type: Boolean, default: false }, // Fixed typo "deefault"
-  isAcceptingMessages: { type: Boolean, required: true }, // Fixed "requried"
+  isAcceptingMessages: { type: Boolean, required: true,default: false }, // Fixed "requried"
   messages: [MessageSchema],
 });
 

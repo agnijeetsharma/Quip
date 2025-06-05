@@ -1,21 +1,25 @@
 import dbConnect from '@/lib/dbConnect';
 import { Question } from '@/model/questions';
-import { getServerSession } from 'next-auth';
-// import { authOptions } from '/auth/[...nextauth]/options';
-import { authOptions } from '../../auth/[...nextauth]/options';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(req:NextApiRequest, res:NextApiResponse) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   await dbConnect();
-  const session = await getServerSession(req, res, authOptions);
-  if (!session || !session.user) return res.status(401).json({ message: 'Unauthorized' });
 
-  const { id } = req.query;
+  // Await the params promise
+  const { id } = await context.params;
 
-  if (req.method === 'DELETE') {
-    await Question.findByIdAndDelete(id);
-    return res.status(200).json({ message: 'Deleted' });
+  // Get session from the request
+  const session = await getServerSession({ req, ...authOptions });
+  if (!session || !session.user) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  res.status(405).json({ message: 'Method not allowed' });
+  try {
+    await Question.findByIdAndDelete(id);
+    return NextResponse.json({ message: 'Deleted' });
+  } catch {
+    return NextResponse.json({ message: 'Failed to delete' }, { status: 500 });
+  }
 }

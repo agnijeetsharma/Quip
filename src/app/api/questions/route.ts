@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { question } = body;
 
-  // Get session - note: `getServerSession` needs `headers` and `cookies` in app router
+ 
   const session = await getServerSession(authOptions)
     
 

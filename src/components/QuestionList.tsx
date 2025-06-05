@@ -1,5 +1,6 @@
 'use client';
 
+import axios from 'axios';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
 
@@ -18,15 +19,11 @@ export default function QuestionList({ questions, onDelete }: QuestionListProps)
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/delete-query/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!res.ok) throw new Error('Failed to delete');
-
-      onDelete(id);
+      await axios.delete(`/api/delete-query/${id}`);
+      onDelete(id); // update state in parent
       toast({ title: 'Deleted' });
     } catch (error) {
+      console.error('Delete error:', error);
       toast({ title: 'Error', description: 'Could not delete', variant: 'destructive' });
     }
   };

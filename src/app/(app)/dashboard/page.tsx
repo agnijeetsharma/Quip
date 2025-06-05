@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { MessageCard } from '@/components/MessageCard';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/hooks/use-toast';
-import { Message } from '@/model/User';
-import { ApiResponse } from '@/types/ApiResponse';
-import { zodResolver } from '@hookform/resolvers/zod';
-import axios, { AxiosError } from 'axios';
-import { Loader2, RefreshCcw, Home } from 'lucide-react';
-import { User } from 'next-auth';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { AcceptMessagesSchema } from '@/schemas/acceptMessagesSchema';
-import AddQuestionForm from '@/components/AddQuestions';
-import QuestionList from '@/components/QuestionList';
+import { MessageCard } from "@/components/MessageCard";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
+import { Message } from "@/model/User";
+import { ApiResponse } from "@/types/ApiResponse";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios, { AxiosError } from "axios";
+import { Loader2, RefreshCcw, Home } from "lucide-react";
+import { User } from "next-auth";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import React, { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { AcceptMessagesSchema } from "@/schemas/acceptMessagesSchema";
+import AddQuestionForm from "@/components/AddQuestions";
+import QuestionList from "@/components/QuestionList";
 
 function UserDashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -38,44 +38,52 @@ function UserDashboard() {
   });
 
   const { register, watch, setValue } = form;
-  const acceptMessages = watch('acceptMessages');
+  const acceptMessages = watch("acceptMessages");
 
   const fetchAcceptMessages = useCallback(async () => {
     setIsSwitchLoading(true);
     try {
-      const questionRes = await axios.get<ApiResponse>('/api/questions');
-      console.log("question" ,questionRes)
-      setQuestions(questionRes.data || []);
+      const questionRes = await axios.get<ApiResponse>("/api/questions");
+      // console.log("question" ,questionRes)
+      setQuestions(questionRes?.data || []);
 
-      const response = await axios.get<ApiResponse>('/api/accept-messages');
-      setValue('acceptMessages', response.data.isAcceptingMessages as boolean);
+      const response = await axios.get<ApiResponse>("/api/accept-messages");
+      setValue("acceptMessages", response.data.isAcceptingMessages as boolean);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
-        title: 'Error',
-        description: axiosError.response?.data.message ?? 'Failed to fetch settings',
-        variant: 'destructive',
+        title: "Error",
+        description:
+          axiosError.response?.data.message ?? "Failed to fetch settings",
+        variant: "destructive",
       });
     } finally {
       setIsSwitchLoading(false);
     }
   }, [setValue, toast]);
+  const handleDelete = (id: string) => {
+    setQuestions((prev) => prev.filter((q) => q._id !== id));
+  };
 
   const fetchMessages = useCallback(
     async (refresh = false) => {
       setIsLoading(true);
       try {
-        const response = await axios.get<ApiResponse>('/api/get-messages');
+        const response = await axios.get<ApiResponse>("/api/get-messages");
         setMessages(response.data.messages || []);
         if (refresh) {
-          toast({ title: 'Refreshed Messages', description: 'Showing latest messages' });
+          toast({
+            title: "Refreshed Messages",
+            description: "Showing latest messages",
+          });
         }
       } catch (error) {
         const axiosError = error as AxiosError<ApiResponse>;
         toast({
-          title: 'Error',
-          description: axiosError.response?.data.message ?? 'Failed to fetch messages',
-          variant: 'destructive',
+          title: "Error",
+          description:
+            axiosError.response?.data.message ?? "Failed to fetch messages",
+          variant: "destructive",
         });
       } finally {
         setIsLoading(false);
@@ -93,24 +101,25 @@ function UserDashboard() {
   const handleSwitchChange = async () => {
     if (questions.length === 0) {
       toast({
-        title: 'Add at least one question first',
-        description: 'You must add a question before accepting messages.',
-        variant: 'destructive',
+        title: "Add at least one question first",
+        description: "You must add a question before accepting messages.",
+        variant: "destructive",
       });
       return;
     }
     try {
-      const response = await axios.post<ApiResponse>('/api/accept-messages', {
+      const response = await axios.post<ApiResponse>("/api/accept-messages", {
         acceptMessages: !acceptMessages,
       });
-      setValue('acceptMessages', !acceptMessages);
-      toast({ title: response.data.message, variant: 'default' });
+      setValue("acceptMessages", !acceptMessages);
+      toast({ title: response.data.message, variant: "default" });
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
-        title: 'Error',
-        description: axiosError.response?.data.message ?? 'Failed to update settings',
-        variant: 'destructive',
+        title: "Error",
+        description:
+          axiosError.response?.data.message ?? "Failed to update settings",
+        variant: "destructive",
       });
     }
   };
@@ -123,7 +132,10 @@ function UserDashboard() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(profileUrl);
-    toast({ title: 'URL Copied!', description: 'Profile URL has been copied to clipboard.' });
+    toast({
+      title: "URL Copied!",
+      description: "Profile URL has been copied to clipboard.",
+    });
   };
 
   return (
@@ -138,7 +150,9 @@ function UserDashboard() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-xl font-semibold text-gray-700">Your Unique Profile Link</h2>
+        <h2 className="text-xl font-semibold text-gray-700">
+          Your Unique Profile Link
+        </h2>
         <div className="flex items-center gap-2">
           <input
             type="text"
@@ -154,20 +168,24 @@ function UserDashboard() {
 
       <div className="flex items-center gap-2">
         <Switch
-          {...register('acceptMessages')}
+          {...register("acceptMessages")}
           checked={acceptMessages}
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
         />
         <span className="text-sm text-gray-700">
-          Accept Messages: <strong>{acceptMessages ? 'On' : 'Off'}</strong>
+          Accept Messages: <strong>{acceptMessages ? "On" : "Off"}</strong>
         </span>
       </div>
 
       <Separator />
 
       <AddQuestionForm onQuestionAdded={() => fetchAcceptMessages()} />
-      <QuestionList questions={questions} setQuestions={setQuestions} />
+      <QuestionList
+        questions={questions}
+        setQuestions={setQuestions}
+        onDelete={handleDelete}
+      />
 
       <Separator />
 
@@ -199,7 +217,9 @@ function UserDashboard() {
             />
           ))
         ) : (
-          <p className="text-gray-500 col-span-full text-center">No messages to display.</p>
+          <p className="text-gray-500 col-span-full text-center">
+            No messages to display.
+          </p>
         )}
       </div>
     </div>
