@@ -3,12 +3,16 @@ import {
   Home,
   LogOut,
   Search,
-  Settings,
+ 
   LayoutDashboard,
   FileQuestionIcon,
-  LogOutIcon,
+
 } from "lucide-react";
-// import { useSidebar } from "@/components/ui/sidebar"
+
+
+import { useSession } from "next-auth/react";
+
+
 
 import {
   Sidebar,
@@ -21,36 +25,39 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { signOut } from "next-auth/react";
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
-  {
-    title: "dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Give-Feedback",
-    url: "/all-questions",
-    icon: FileQuestionIcon,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Log Out",
-    icon: LogOut,
-    onClick: () => signOut({ callbackUrl: "/" }),
-  },
-];
 
 export function AppSidebar() {
+  const { data: session} = useSession();
+  // Menu items.
+  const items = [
+    
+    {
+      title: "Home",
+      url: "/",
+      icon: Home,
+    },
+    {
+      title: "dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Give-Feedback",
+      url: "/all-questions",
+      icon: FileQuestionIcon,
+    },
+    {
+      title: "Search",
+      url: "#",
+      icon: Search,
+    },
+   
+      ...(session ? [{
+        title: "Logout",
+        icon: LogOut,
+        onClick: () => signOut( {callbackUrl: "/" }),
+      }] : [])
+    ];
   return (
     <Sidebar className="bg">
       <SidebarContent>

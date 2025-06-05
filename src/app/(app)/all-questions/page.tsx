@@ -22,7 +22,7 @@ export default function AllQuestionsPage() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await axios.get("/api/questions/");
+        const res = await axios.get("/api/questions/all/");
         setQuestions(res.data);
       } catch (error) {
         console.error("Error fetching questions", error);
