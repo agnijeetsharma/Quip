@@ -1,39 +1,44 @@
-'use client'
+'use client';
 
-import React from 'react';
-import Image from 'next/image';
+// import Image from 'next/image';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { Button } from './ui/button';
 import { User } from 'next-auth';
-import logo from '@/constant/logo.png'; // Adjust the path as necessary
-
+// import logo from '@/constant/logo.png';
 
 function Navbar() {
   const { data: session } = useSession();
-  const user : User = session?.user as User;
+  const user: User = session?.user as User;
 
   return (
-    <nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-        <a href="#" className="text-xl font-bold mb-4 md:mb-0">
-          <Image src={logo} alt="not found" width={120} className="rounded-xl" height={50} />
-          
-        </a>
-        {session ? (
-          <>
-            <span className="mr-4">
-              Welcome, {user.username || user.email}
-            </span>
-            <Button onClick={() => signOut()} className="w-full md:w-auto bg-slate-100 text-black" variant='outline'>
-              Logout
-            </Button>
-          </>
-        ) : (
-          <Link href="/sign-in">
-            <Button className="w-full md:w-auto bg-slate-100 text-black" variant={'outline'}>Login</Button>
-          </Link>
-        )}
+    <nav className="bg-gray-950 border-b border-gray-800 shadow-md px-6 py-4">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
+        <Link href="/" className="flex items-center space-x-2">
+          {/* <Image src={logo} alt="Quip Logo" width={120} height={50} className="rounded-xl" /> */}
+          <span className="hidden md:block font-bold text-white text-xl hover:text-yellow-500">Quip</span>
+        </Link>
+        <div>
+          {session ? (
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-300 hidden md:inline">
+                Welcome, {user.username || user.email}
+              </span>
+              <Button
+                onClick={() => signOut()}
+                className="bg-pink-500 hover:bg-pink-600 text-white"
+              >
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Link href="/sign-in">
+              <Button className="bg-white hover:bg-yellow-500 text-black font-semibold">
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
     </nav>
   );
