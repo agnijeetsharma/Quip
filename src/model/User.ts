@@ -1,24 +1,37 @@
+// File: models/User.ts
 import mongoose, { Schema, Document } from "mongoose";
 
+/** Message Subdocument Interface */
 export interface Message extends Document {
   content: string;
   createdAt: Date;
+  questionId: mongoose.Types.ObjectId; // Reference to Question
 }
+
+/** Message Schema */
 const MessageSchema: Schema<Message> = new Schema({
   content: { type: String, required: true },
   createdAt: { type: Date, required: true, default: Date.now },
+  questionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Question',
+    required: true,
+  },
 });
 
+/** User Interface */
 export interface User extends Document {
   username: string;
   email: string;
   password: string;
   verifyCode: string;
-  isVerified: true;
   verifyCodeExpiry: Date;
+  isVerified: boolean;
   isAcceptingMessages: boolean;
   messages: Message[];
 }
+
+/** User Schema */
 const UserSchema: Schema<User> = new Schema({
   username: { type: String, required: true, unique: true, trim: true },
   email: {
@@ -31,17 +44,15 @@ const UserSchema: Schema<User> = new Schema({
     ],
   },
   password: { type: String, required: true },
-  verifyCode: { type: String, required: [true, "Veify code is requried"] },
-  verifyCodeExpiry: {
-    type: Date,
-    required: [true, "Verified expiry code is requried"],
-  },
-  isVerified: { type: Boolean, deefault: true },
-  isAcceptingMessages: { type: Boolean, requried: true },
+  verifyCode: { type: String, required: true },
+  verifyCodeExpiry: { type: Date, required: true },
+  isVerified: { type: Boolean, default: false }, // Fixed typo "deefault"
+  isAcceptingMessages: { type: Boolean, required: true }, // Fixed "requried"
   messages: [MessageSchema],
 });
+
+/** User Model */
 const UserModel =
-  (mongoose.models.User as mongoose.Model<User>) ||
-  mongoose.model<User>("User", UserSchema);
+  mongoose.models.User as mongoose.Model<User> || mongoose.model<User>("User", UserSchema);
 
 export default UserModel;

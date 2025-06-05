@@ -15,8 +15,8 @@ function Navbar() {
     <nav className="bg-gray-950 border-b border-gray-800 shadow-md px-6 py-4">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <Link href="/" className="flex items-center space-x-2">
-          {/* <Image src={logo} alt="Quip Logo" width={120} height={50} className="rounded-xl" /> */}
-          <span className="hidden md:block font-bold text-white text-xl hover:text-yellow-500">Quip</span>
+          
+          <span className=" font-bold text-white text-xl hover:text-yellow-500">Quip</span>
         </Link>
         <div>
           {session ? (
