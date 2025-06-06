@@ -24,7 +24,12 @@ export default function VerifyAccount() {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof verifySchema>>({
     resolver: zodResolver(verifySchema),
+    mode: "onSubmit",
+    defaultValues: {
+      code: "", // ✅ ensures input is always controlled
+    },
   });
+  
 
   const onSubmit = async (data: z.infer<typeof verifySchema>) => {
     try {

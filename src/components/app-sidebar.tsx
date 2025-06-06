@@ -68,7 +68,7 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title} onClick={item.onClick} className="cursor-pointer">
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <a href={item.url} className="hover:text-yellow-500 ">
                       <item.icon />
                       <span>{item.title}</span>
                     </a>
