@@ -48,7 +48,7 @@ export async function sendVerificationEmail(
     await transporter.sendMail({
       from: `"Agnijeet Sharma" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "Verify your account",
+      subject: `Hey ${username}, confirm your Quip account`,
       html: htmlContent,
     });
 
