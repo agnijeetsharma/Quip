@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { DeleteIcon,Delete } from "lucide-react";
 
 interface Question {
   _id: string;
@@ -36,8 +37,8 @@ export default function QuestionList({ questions, onDelete }: QuestionListProps)
         questions.map((q) => (
           <div key={q._id} className="flex justify-between items-center border p-2 rounded-md">
             <p className="text-sm text-gray-800">{q.question}</p>
-            <Button size="sm" variant="destructive" onClick={() => handleDelete(q._id)}>
-              Delete
+            <Button  variant="destructive" onClick={() => handleDelete(q._id)}>
+             <Delete className='w-5 h-5'/>
             </Button>
           </div>
         ))

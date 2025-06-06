@@ -34,32 +34,34 @@ export default function AllQuestionsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-4 text-center">
-        All Public Questions
-      </h1>
-      <Separator className="mb-4" />
+    <div className="min-h-screen p-6 bg-gradient-to-br from-gray-100 to-white">
+      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">All Public Questions</h1>
+      <Separator className="mb-6" />
       {loading ? (
         <div className="flex justify-center items-center h-40">
           <Loader2 className="h-6 w-6 animate-spin text-gray-600" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {questions.length > 0 ? (
             questions.map((q) => (
-              <Link key={q._id} href={`/u/${q.username}/${q._id}/`}>
-                <Card className="hover:shadow-lg cursor-pointer transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="text-md text-gray-800">
-                      @{q.username}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600">{q.question}</p>
-                    <p className="text-xs text-gray-400 mt-2">
-                      {new Date(q.createdAt).toLocaleString()}
-                    </p>
-                  </CardContent>
+              <Link key={q._id} href={`/u/${q.username}/${q._id}/`} className="block h-full">
+                <Card className="flex flex-col justify-between h-full hover:shadow-xl transition-shadow border border-gray-200 rounded-2xl p-4 bg-white">
+                  <div>
+                    <CardHeader className="p-0 mb-2">
+                      <CardTitle className="text-lg font-semibold text-gray-800">
+                        @{q.username}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        {q?.question }
+                      </p>
+                    </CardContent>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-4 text-right">
+                    {new Date(q.createdAt).toLocaleString()}
+                  </p>
                 </Card>
               </Link>
             ))
