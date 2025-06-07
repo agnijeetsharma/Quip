@@ -21,7 +21,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen  bg-gray-900 text-white">
+    <div className="flex flex-col min-h-screen  bg-gray-900 text-white overflow-x-hidden">
       <Navbar />
 
       <main className="flex-grow flex flex-col md:flex-row items-center justify-center gap-8 px-6 py-16">
@@ -77,7 +77,7 @@ export default function Home() {
         </Carousel>
       </main>
 
-      <footer className="text-center py-4 text-sm text-gray-400 border-t border-gray-800">
+      <footer className="text-center  py-4 text-sm text-gray-400 border-t border-gray-800">
         © 2025 Quip. All rights reserved.
       </footer>
     </div>

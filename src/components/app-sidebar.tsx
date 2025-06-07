@@ -47,8 +47,8 @@ export function AppSidebar() {
       icon: FileQuestionIcon,
     },
     {
-      title: "Search",
-      url: "#",
+      title: "How it works",
+      url: "/how-it-works",
       icon: Search,
     },
    
@@ -59,7 +59,7 @@ export function AppSidebar() {
       }] : [])
     ];
   return (
-    <Sidebar className="bg">
+    <Sidebar >
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>

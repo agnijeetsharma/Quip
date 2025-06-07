@@ -166,6 +166,7 @@ function UserDashboard() {
 
       <Separator />
 
+      <h2 className="text-md font-semibold text-gray-700">Add Query to get Random Suggestions</h2>
       <AddQuestionForm onQuestionAdded={() => fetchAcceptMessages()} />
       <QuestionList questions={questions} setQuestions={setQuestions} onDelete={handleDelete} />
       {questions.length === 0 && (
