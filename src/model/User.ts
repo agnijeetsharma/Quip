@@ -1,14 +1,14 @@
-// File: models/User.ts
+
 import mongoose, { Schema, Document } from "mongoose";
 
-/** Message Subdocument Interface */
+
 export interface Message extends Document {
   content: string;
   createdAt: Date;
-  questionId: mongoose.Types.ObjectId; // Reference to Question
+  questionId: mongoose.Types.ObjectId; 
 }
 
-/** Message Schema */
+
 const MessageSchema: Schema<Message> = new Schema({
   content: { type: String, required: true },
   createdAt: { type: Date, required: true, default: Date.now },
@@ -19,7 +19,7 @@ const MessageSchema: Schema<Message> = new Schema({
   },
 });
 
-/** User Interface */
+
 export interface User extends Document {
   username: string;
   email: string;
@@ -31,7 +31,7 @@ export interface User extends Document {
   messages: Message[];
 }
 
-/** User Schema */
+
 const UserSchema: Schema<User> = new Schema({
   username: { type: String, required: true, unique: true, trim: true },
   email: {
@@ -46,12 +46,12 @@ const UserSchema: Schema<User> = new Schema({
   password: { type: String, required: true },
   verifyCode: { type: String, required: true },
   verifyCodeExpiry: { type: Date, required: true },
-  isVerified: { type: Boolean, default: false }, // Fixed typo "deefault"
-  isAcceptingMessages: { type: Boolean, required: true,default: false }, // Fixed "requried"
+  isVerified: { type: Boolean, default: false }, 
+  isAcceptingMessages: { type: Boolean, required: true,default: false }, 
   messages: [MessageSchema],
 });
 
-/** User Model */
+
 const UserModel =
   mongoose.models.User as mongoose.Model<User> || mongoose.model<User>("User", UserSchema);
 

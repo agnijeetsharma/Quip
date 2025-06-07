@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
     const newMessage: Message = {
       content,
-      questionId: id, // Assuming id is the question ID
+      questionId: id, 
       createdAt: new Date(),
     };
 

@@ -7,10 +7,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   await dbConnect();
 
-  // Await the params promise
   const { id } = await context.params;
 
-  // Get session from the request
   const session = await getServerSession({ req, ...authOptions });
   if (!session || !session.user) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

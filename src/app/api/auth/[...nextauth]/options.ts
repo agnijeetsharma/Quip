@@ -10,8 +10,8 @@ export const authOptions: NextAuthOptions = {
       id: "credentials",
       name: "credentials",
       credentials: {
-        email: { label: "Email", type: "text" }, // Fixed 'label'
-        password: { label: "Password", type: "password" }, // Fixed 'label'
+        email: { label: "Email", type: "text" }, 
+        password: { label: "Password", type: "password" }, 
       },
       async authorize(credentials: any): Promise<any> {
         await dbConnect();
@@ -55,7 +55,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      if (!session.user) session.user = {}; // Ensure session.user exists
+      if (!session.user) session.user = {}; 
       if (token) {
           session.user._id = token._id;
           session.user.isVerified = token.isVerified;

@@ -9,7 +9,6 @@ export async function POST(request: Request) {
   try {
     const { username, email, password } = await request.json();
 
-    // Check for existing verified user by username
     const isVerifiedUser = await UserModel.findOne({
       username,
       isVerified: true,
@@ -40,14 +39,14 @@ export async function POST(request: Request) {
         );
       }
 
-      // Update existing unverified user's details
+      
       const hashPassword = await bcrypt.hash(password, 10);
       verifiedUserWithEmail.password = hashPassword;
       verifiedUserWithEmail.verifyCode = verifyCode;
       verifiedUserWithEmail.verifyCodeExpiry = new Date(Date.now() + 3600000); // 1 hour from now
       await verifiedUserWithEmail.save();
     } else {
-      // Create a new user
+    
       const hashPassword = await bcrypt.hash(password, 10);
       const expiryDate = new Date(Date.now() + 3600000); // 1 hour from now
 
@@ -64,8 +63,7 @@ export async function POST(request: Request) {
 
       await newUser.save();
     }
-
-    // Send verification email
+    
     const emailResponse = await sendVerificationEmail(email, username, verifyCode);
     if (!emailResponse.success) {
       return NextResponse.json(

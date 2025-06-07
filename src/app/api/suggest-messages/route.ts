@@ -28,13 +28,13 @@ export async function POST() {
     const text = result?.candidates?.[0]?.content?.parts?.[0]?.text ?? "No response from Gemini";
 console.log("Gemini response:", text);
     const encoder = new TextEncoder();
-    const chunks = text.split(" "); // or split by sentence for better UX
+    const chunks = text.split(" "); 
 
     const stream = new ReadableStream({
       async start(controller) {
         for (const chunk of chunks) {
           controller.enqueue(encoder.encode(chunk + " "));
-          await new Promise((r) => setTimeout(r, 100)); // fake delay
+          await new Promise((r) => setTimeout(r, 100)); 
         }
         controller.close();
       },

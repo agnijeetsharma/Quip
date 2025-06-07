@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { DeleteIcon,Delete } from "lucide-react";
+import { Delete } from "lucide-react";
 
 interface Question {
   _id: string;

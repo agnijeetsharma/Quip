@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     
     const queryParam = {
-      username: searchParams.get("username") || "", // Handle null
+      username: searchParams.get("username") || "",
     };
 
     // Validation with Zod
@@ -33,9 +33,9 @@ export async function GET(request: Request) {
       );
     }
    
-    const { username } = result.data; // Extract username
+    const { username } = result.data;
 
-    // Check if the username already exists
+   
     const existingUsername = await UserModel.findOne({
       username,
       isVerified: true,

@@ -4,7 +4,7 @@ import { Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
 import messages from "@/message.json";
-// import { Button } from "@/ui/button";
+
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -12,7 +12,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Navbar from "@/components/Navbar";
-import { signIn } from "next-auth/react"; // Make sure you import this
+import { signIn } from "next-auth/react"; 
 import HowItWorks from "@/components/Works";
 import { useSession } from "next-auth/react";
 

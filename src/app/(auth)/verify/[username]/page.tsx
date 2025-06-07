@@ -26,7 +26,7 @@ export default function VerifyAccount() {
     resolver: zodResolver(verifySchema),
     mode: "onSubmit",
     defaultValues: {
-      code: "", // ✅ ensures input is always controlled
+      code: "", 
     },
   });
   

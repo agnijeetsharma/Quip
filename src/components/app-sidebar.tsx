@@ -28,7 +28,7 @@ import { signOut } from "next-auth/react";
 
 export function AppSidebar() {
   const { data: session} = useSession();
-  // Menu items.
+  
   const items = [
     
     {

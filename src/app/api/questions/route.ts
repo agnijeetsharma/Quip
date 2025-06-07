@@ -6,7 +6,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/options'; // Adjust pa
 export async function POST(request: Request) {
   await dbConnect();
 
-  // Parse JSON body
+
   const body = await request.json();
   const { question } = body;
 
