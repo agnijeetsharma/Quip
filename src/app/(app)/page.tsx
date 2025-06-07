@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/carousel";
 import Navbar from "@/components/Navbar";
 import { signIn } from "next-auth/react"; // Make sure you import this
+import HowItWorks from "@/components/Works";
 
 export default function Home() {
   const handleGetStarted = () => {
@@ -38,13 +39,14 @@ export default function Home() {
           </p>
 
          
-          <div className="flex justify-center md:justify-start">
+          <div className="flex justify-center md:justify-start gap-5">
             <Button
               onClick={handleGetStarted}
               className="bg-white hover:bg-yellow-600 text-black px-6 py-3 text-lg rounded-lg transition"
             >
               Get Started
             </Button>
+           
           </div>
         </section>
 
@@ -77,9 +79,8 @@ export default function Home() {
         </Carousel>
       </main>
 
-      <footer className="text-center  py-4 text-sm text-gray-400 border-t border-gray-800">
-        © 2025 Quip. All rights reserved.
-      </footer>
+    
+      <HowItWorks/>
     </div>
   );
 }
