@@ -35,7 +35,12 @@ export default function AllQuestionsPage() {
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-gray-100 to-white">
-      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">All Public Questions</h1>
+      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
+        All Public Questions
+      </h1>
+      <h4 className="text-sm font-bold mb-6 text-center text-gray-800">
+        Click on any message below to give anonymous feedback{" "}
+      </h4>
       <Separator className="mb-6" />
       {loading ? (
         <div className="flex justify-center items-center h-40">
@@ -45,7 +50,11 @@ export default function AllQuestionsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {questions.length > 0 ? (
             questions.map((q) => (
-              <Link key={q._id} href={`/u/${q.username}/${q._id}/`} className="block h-full">
+              <Link
+                key={q._id}
+                href={`/u/${q.username}/${q._id}/`}
+                className="block h-full"
+              >
                 <Card className="flex flex-col justify-between h-full hover:shadow-xl transition-shadow border border-gray-200 rounded-2xl p-4 bg-white">
                   <div>
                     <CardHeader className="p-0 mb-2">
@@ -55,7 +64,7 @@ export default function AllQuestionsPage() {
                     </CardHeader>
                     <CardContent className="p-0">
                       <p className="text-gray-700 text-sm leading-relaxed">
-                        {q?.question }
+                        {q?.question}
                       </p>
                     </CardContent>
                   </div>

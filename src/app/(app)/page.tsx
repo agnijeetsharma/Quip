@@ -21,11 +21,11 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col min-h-screen  bg-gray-900 text-white">
       <Navbar />
 
       <main className="flex-grow flex flex-col md:flex-row items-center justify-center gap-8 px-6 py-16">
-        {/* Left Text Section */}
+        
         <section className="text-center md:text-left max-w-md space-y-6">
           <h1 className="text-6xl font-bold leading-tight">
             Dive into{" "}
@@ -37,7 +37,7 @@ export default function Home() {
             truth.
           </p>
 
-          {/* ✅ Get Started Button */}
+         
           <div className="flex justify-center md:justify-start">
             <Button
               onClick={handleGetStarted}
@@ -48,7 +48,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Carousel Section */}
         <Carousel
           plugins={[Autoplay({ delay: 2500 })]}
           className="w-full max-w-md"

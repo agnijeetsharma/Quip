@@ -8,7 +8,7 @@ import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { CardHeader, CardContent, Card } from '@/components/ui/card';
-import { useCompletion } from 'ai/react';
+
 import {
   Form,
   FormControl,
@@ -28,28 +28,26 @@ import { messageSchema } from '@/schemas/messageSchema';
 const specialChar = '||';
 
 const parseStringMessages = (messageString: string): string[] => {
-  return messageString.split(specialChar);
+  return messageString.split(specialChar).filter(Boolean);
 };
 
-const initialMessageString =
-  "What's your favorite movie?||Do you have any pets?||What's your dream job?";
+const demoMessages = [
+  "What’s a random fun fact you recently learned that blew your mind?",
+  "If you had a superpower for one day, what would you choose?",
+  "What's your dream job?",
+];
+
+
 
 export default function SendMessage() {
-  const params = useParams<{ username: string,id:string }>();
-  const id=params.id;
+  const params = useParams<{ username: string; id: string }>();
+  const id = params.id;
   const username = params.username;
-  console.log('Username:', username);
-  console.log('ID:', id);
 
-  const {
-    complete,
-    completion,
-    isLoading: isSuggestLoading,
-    error,
-  } = useCompletion({
-    api: '/api/suggest-messages',
-    initialCompletion: initialMessageString,
-  });
+  const [completion, setCompletion] = useState('');
+  const [isSuggestLoading, setIsSuggestLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [hasFetched, setHasFetched] = useState(false);
 
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
@@ -69,7 +67,7 @@ export default function SendMessage() {
       const response = await axios.post<ApiResponse>('/api/send-message', {
         ...data,
         username,
-        id
+        id,
       });
 
       toast({
@@ -82,7 +80,7 @@ export default function SendMessage() {
       toast({
         title: 'Error',
         description:
-          axiosError.response?.data.message ?? 'Failed to sent message',
+          axiosError.response?.data.message ?? 'Failed to send message',
         variant: 'destructive',
       });
     } finally {
@@ -91,13 +89,37 @@ export default function SendMessage() {
   };
 
   const fetchSuggestedMessages = async () => {
+    setIsSuggestLoading(true);
+    setError(null);
+    setCompletion('');
+    setHasFetched(true);
+
     try {
-      complete('');
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-      // Handle error appropriately
+      const res = await fetch('/api/suggest-messages', {
+        method: 'POST',
+      });
+
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+      let result = '';
+
+      while (true) {
+        const { done, value } = await reader!.read();
+        if (done) break;
+        const chunk = decoder.decode(value);
+        result += chunk;
+        setCompletion(prev => prev + chunk);
+      }
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setIsSuggestLoading(false);
     }
   };
+
+  const messagesToDisplay = hasFetched
+    ? parseStringMessages(completion)
+    : demoMessages;
 
   return (
     <div className="container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
@@ -140,12 +162,15 @@ export default function SendMessage() {
 
       <div className="space-y-4 my-8">
         <div className="space-y-2">
+          <h2 className="text-lg font-semibold text-gray-700">
+            💡 Use AI to get message suggestions!
+          </h2>
           <Button
             onClick={fetchSuggestedMessages}
             className="my-4"
             disabled={isSuggestLoading}
           >
-            Suggest Messages
+            {isSuggestLoading ? 'Generating...' : 'Suggest Messages'}
           </Button>
           <p>Click on any message below to select it.</p>
         </div>
@@ -157,7 +182,7 @@ export default function SendMessage() {
             {error ? (
               <p className="text-red-500">{error.message}</p>
             ) : (
-              parseStringMessages(completion).map((message, index) => (
+              messagesToDisplay.map((message, index) => (
                 <Button
                   key={index}
                   variant="outline"
