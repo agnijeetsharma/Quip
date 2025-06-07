@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Message } from "@/model/User";
 import { ApiResponse } from "@/types/ApiResponse";
+import { Question } from "@/model/questions"; // Ensure this path is correct
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { Loader2, RefreshCcw, Home } from "lucide-react";
@@ -34,7 +35,7 @@ function UserDashboard() {
   const fetchAcceptMessages = useCallback(async () => {
     setIsSwitchLoading(true);
     try {
-      const questionRes = await axios.get<ApiResponse>("/api/questions");
+      const questionRes = await axios.get<Question[]>("/api/questions");
       setQuestions(questionRes?.data || []);
       const response = await axios.get<ApiResponse>("/api/accept-messages");
       setValue("acceptMessages", response.data.isAcceptingMessages as boolean);
@@ -42,7 +43,8 @@ function UserDashboard() {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
         title: "Error",
-        description: axiosError.response?.data.message ?? "Failed to fetch settings",
+        description:
+          axiosError.response?.data.message ?? "Failed to fetch settings",
         variant: "destructive",
       });
     } finally {
@@ -53,7 +55,6 @@ function UserDashboard() {
   const handleDeleteMessage = (id: string) => {
     setMessages((prev) => prev.filter((m) => m._id !== id));
   };
-  
 
   const handleDelete = (id: string) => {
     setQuestions((prev) => prev.filter((q) => q._id !== id));
@@ -66,13 +67,17 @@ function UserDashboard() {
         const response = await axios.get<ApiResponse>("/api/get-messages");
         setMessages(response.data.messages || []);
         if (refresh) {
-          toast({ title: "Refreshed Messages", description: "Showing latest messages" });
+          toast({
+            title: "Refreshed Messages",
+            description: "Showing latest messages",
+          });
         }
       } catch (error) {
         const axiosError = error as AxiosError<ApiResponse>;
         toast({
           title: "Error",
-          description: axiosError.response?.data.message ?? "Failed to fetch messages",
+          description:
+            axiosError.response?.data.message ?? "Failed to fetch messages",
           variant: "destructive",
         });
       } finally {
@@ -107,7 +112,8 @@ function UserDashboard() {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
         title: "Error",
-        description: axiosError.response?.data.message ?? "Failed to update settings",
+        description:
+          axiosError.response?.data.message ?? "Failed to update settings",
         variant: "destructive",
       });
     }
@@ -121,7 +127,10 @@ function UserDashboard() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(profileUrl);
-    toast({ title: "URL Copied!", description: "Profile URL has been copied to clipboard." });
+    toast({
+      title: "URL Copied!",
+      description: "Profile URL has been copied to clipboard.",
+    });
   };
 
   return (
@@ -136,7 +145,9 @@ function UserDashboard() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-xl font-semibold text-gray-700">Your Unique Profile Link</h2>
+        <h2 className="text-xl font-semibold text-gray-700">
+          Your Unique Profile Link
+        </h2>
         <div className="flex flex-col md:flex-row items-start md:items-center gap-3">
           <input
             type="text"
@@ -144,7 +155,10 @@ function UserDashboard() {
             disabled
             className="w-full border rounded-lg px-3 py-2 text-sm text-gray-700 bg-gray-100"
           />
-          <Button onClick={copyToClipboard} className="text-sm font-medium px-4">
+          <Button
+            onClick={copyToClipboard}
+            className="text-sm font-medium px-4"
+          >
             Copy
           </Button>
         </div>
@@ -166,9 +180,12 @@ function UserDashboard() {
 
       <Separator />
 
-      <h2 className="text-md font-semibold text-gray-700">Add Query to get Random Suggestions</h2>
+      <h2 className="text-md font-semibold text-gray-700">
+        Add Query to get Random Suggestions
+      </h2>
       <AddQuestionForm onQuestionAdded={() => fetchAcceptMessages()} />
-      <QuestionList questions={questions} setQuestions={setQuestions} onDelete={handleDelete} />
+      <QuestionList questions={questions} onDelete={handleDelete} />
+
       {questions.length === 0 && (
         <p className="text-center text-gray-500 text-sm">
           Add at least one question to get random suggestions.
@@ -178,7 +195,9 @@ function UserDashboard() {
       <Separator />
 
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-700">Random Suggestions</h2>
+        <h2 className="text-lg font-semibold text-gray-700">
+          Random Suggestions
+        </h2>
         <Button
           variant="outline"
           onClick={(e) => {
@@ -187,7 +206,13 @@ function UserDashboard() {
           }}
           className="text-sm flex items-center gap-2 px-4"
         >
-          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <><RefreshCcw className="h-4 w-4" /> Refresh</>}
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <>
+              <RefreshCcw className="h-4 w-4" /> Refresh
+            </>
+          )}
         </Button>
       </div>
 
@@ -201,7 +226,9 @@ function UserDashboard() {
             />
           ))
         ) : (
-          <p className="text-gray-500 col-span-full text-center">No messages to display.</p>
+          <p className="text-gray-500 col-span-full text-center">
+            No messages to display.
+          </p>
         )}
       </div>
     </div>

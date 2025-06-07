@@ -30,13 +30,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const newMessage: Message = {
+    const newMessage = {
       content,
       questionId: id, 
       createdAt: new Date(),
+    
     };
 
-    user.messages.push(newMessage);
+    user.messages.push(newMessage as Message);
     await user.save();
 
     return Response.json(

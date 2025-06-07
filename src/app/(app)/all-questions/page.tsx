@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 
 interface Question {
   _id: string;
-  content: string;
+  question: string;
   username: string;
   createdAt: string;
 }

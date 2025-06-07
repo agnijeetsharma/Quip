@@ -4,10 +4,14 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  await dbConnect();
+export async function DELETE(req: NextRequest, context: any) {
+  const { id } = (context as { params: { id: string } }).params;
+  console.log('Delete Request for message ID:', id);
+  if (!id) {
+    return NextResponse.json({ message: 'Message ID is required' }, { status: 400 });
+  }
 
-  const { id } = await context.params;
+  await dbConnect();
 
   const session = await getServerSession({ req, ...authOptions });
   if (!session || !session.user) {
@@ -17,7 +21,8 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
   try {
     await Question.findByIdAndDelete(id);
     return NextResponse.json({ message: 'Deleted' });
-  } catch {
+  } catch (error) {
+    console.error('Delete Error:', error);
     return NextResponse.json({ message: 'Failed to delete' }, { status: 500 });
   }
 }
