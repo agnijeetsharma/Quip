@@ -11,7 +11,6 @@ import {
   Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
 export default function HowItWorks() {
@@ -124,7 +123,7 @@ export default function HowItWorks() {
           <p className="text-gray-400">
             Create your profile and start receiving messages today.
           </p>
-          <Link href="/">
+          <Link href="/sign-in">
             <Button className="bg-white text-black hover:bg-yellow-500 transition px-6 py-3">
               Get Started
             </Button>

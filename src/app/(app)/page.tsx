@@ -14,19 +14,19 @@ import {
 import Navbar from "@/components/Navbar";
 import { signIn } from "next-auth/react"; // Make sure you import this
 import HowItWorks from "@/components/Works";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   const handleGetStarted = () => {
-    
-    signIn(); 
+    signIn();
   };
+  const { data: session } = useSession();
 
   return (
     <div className="flex flex-col min-h-screen  bg-gray-900 text-white overflow-x-hidden">
       <Navbar />
 
       <main className="flex-grow flex flex-col md:flex-row items-center justify-center gap-8 px-6 py-16">
-        
         <section className="text-center md:text-left max-w-md space-y-6">
           <h1 className="text-6xl font-bold leading-tight">
             Dive into{" "}
@@ -38,7 +38,6 @@ export default function Home() {
             truth.
           </p>
 
-         
           <div className="flex justify-center md:justify-start gap-5">
             <Button
               onClick={handleGetStarted}
@@ -46,7 +45,6 @@ export default function Home() {
             >
               Get Started
             </Button>
-           
           </div>
         </section>
 
@@ -79,8 +77,13 @@ export default function Home() {
         </Carousel>
       </main>
 
-    
-      <HowItWorks/>
+      {session ? (
+        <footer className="text-center  py-4 text-sm text-gray-400 border-t border-gray-800">
+          © 2025 Quip. All rights reserved.
+        </footer>
+      ) : (
+        <HowItWorks />
+      )}
     </div>
   );
 }
