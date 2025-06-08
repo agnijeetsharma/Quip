@@ -169,6 +169,7 @@ export default function SendMessage() {
             onClick={fetchSuggestedMessages}
             className="my-4"
             disabled={isSuggestLoading}
+            
           >
             {isSuggestLoading ? 'Generating...' : 'Suggest Messages'}
           </Button>
@@ -186,7 +187,7 @@ export default function SendMessage() {
                 <Button
                   key={index}
                   variant="outline"
-                  className="mb-2"
+                   className="w-full text-left whitespace-normal break-words mb-2 p-2 sm:text-base"
                   onClick={() => handleMessageClick(message)}
                 >
                   {message}
